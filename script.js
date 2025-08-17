@@ -3,6 +3,9 @@ let combinations = [];
 let selected = {};
 let freeInputVars = new Set();
 let freeValues = {};
+let calcValues = {};
+// === Sofia: computed fields support ===
+
 
 
 function ready(fn){ document.readyState !== 'loading' ? fn() : document.addEventListener('DOMContentLoaded', fn); }
@@ -26,7 +29,10 @@ ready(() => {
       el.value = '';
       el.classList.remove('filled');
     });
-  };
+  calcValues = {};
+  updateCalculatedFields();
+};
+
 
   document.getElementById('printBtn').onclick = () => {
     const { jsPDF } = window.jspdf;
@@ -44,6 +50,14 @@ ready(() => {
     });
     // Include free input values as well
     Object.entries(freeValues).forEach(([v, val]) => {
+      if (val === undefined || val === '') return;
+      const line = `${v}: ${val}`;
+      doc.text(line, 10, y);
+      y += 6.5;
+      if (y > 280) { doc.addPage(); y = 12; }
+    });
+    // Include calculated values
+    Object.entries(calcValues).forEach(([v, val]) => {
       const line = `${v}: ${val}`;
       doc.text(line, 10, y);
       y += 6.5;
@@ -142,7 +156,9 @@ function updateFields() {
   // Purge any free-input variables from 'selected' (safety)
   if (freeInputVars && freeInputVars.size) {
     [...freeInputVars].forEach(v => { if (v in selected) delete selected[v]; });
-  }
+  
+  updateCalculatedFields();
+}
   const possible = combinations.filter(c =>
     Object.entries(selected).every(([v, val]) => {
       if (freeInputVars.has(v)) return true; // non vincola la combinazione
@@ -163,6 +179,46 @@ function updateFields() {
       } else {
         el.classList.add('impossible');
         el.classList.remove('selected');
+      }
+    }
+  });
+}
+
+
+function _num(x){
+  if (x === undefined || x === null) return NaN;
+  if (typeof x === 'number') return x;
+  const s = String(x).trim().replace(',', '.');
+  const n = Number(s);
+  return Number.isFinite(n) ? n : NaN;
+}
+
+// Calcolo dei campi <calcolato>
+function updateCalculatedFields(){
+  calcValues = {};
+  // Calcola NUMERO STRAPPI se disponibili: (LUNGHEZZA ROTOLO mt * 100) / FORMATO STRAPPO cm
+  const lenm = freeValues['LUNGHEZZA ROTOLO mt'];
+  // formato strappo può essere una selezione (18, 20, ...) oppure un valore libero futuro
+  const formatoSel = (selected['FORMATO STRAPPO cm'] !== undefined) ? selected['FORMATO STRAPPO cm'] : freeValues['FORMATO STRAPPO cm'];
+  const L = _num(lenm);
+  const F = _num(formatoSel);
+  let resultStrappi = null;
+  if (Number.isFinite(L) && Number.isFinite(F) && F > 0){
+    const raw = (L * 100.0) / F;
+    // Arrotondamento: per praticità commerciale, arrotondiamo all'intero più vicino
+    // (può essere adattato a ceil/floor se preferisci)
+    const rounded = Math.round(raw);
+    calcValues['NUMERO STRAPPI'] = rounded;
+    resultStrappi = rounded;
+  }
+  // Aggiorna UI del campo "NUMERO STRAPPI"
+  document.querySelectorAll('.section').forEach(section => {
+    const varName = section.dataset.var;
+    if (varName === 'NUMERO STRAPPI'){
+      const span = section.querySelector('.calc-field');
+      if (span){
+        span.textContent = (resultStrappi !== null) ? String(resultStrappi) : '—';
+        span.title = 'Campo calcolato' + ((resultStrappi !== null) ? ` = ${resultStrappi}` : '');
       }
     }
   });
