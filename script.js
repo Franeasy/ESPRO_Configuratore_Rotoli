@@ -4,10 +4,8 @@ let selected = {};
 let freeInputVars = new Set();
 let freeValues = {};
 let calcValues = {};
-// === Sofia: computed fields support ===
 
-
-
+// Helper: DOM ready
 function ready(fn){ document.readyState !== 'loading' ? fn() : document.addEventListener('DOMContentLoaded', fn); }
 
 ready(() => {
@@ -19,9 +17,11 @@ ready(() => {
       renderMask();
     });
 
+  // PULISCI
   document.getElementById('cleanBtn').onclick = () => {
     selected = {};
-  freeValues = {};
+    freeValues = {};
+    calcValues = {};
     document.querySelectorAll('.data-field').forEach(el => {
       el.classList.remove('selected', 'impossible');
     });
@@ -29,11 +29,10 @@ ready(() => {
       el.value = '';
       el.classList.remove('filled');
     });
-  calcValues = {};
-  updateCalculatedFields();
-};
+    updateCalculatedFields();
+  };
 
-
+  // STAMPA
   document.getElementById('printBtn').onclick = () => {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
@@ -100,7 +99,7 @@ function renderMask() {
         };
       } else if (String(val).includes('<calcolato')) {
         el = document.createElement('span');
-        el.textContent = variable;
+        el.textContent = '—';
         el.title = 'Campo calcolato';
         el.className = 'calc-field';
       } else {
@@ -120,6 +119,7 @@ function renderMask() {
 
 function fieldClicked(variable, value, element) {
   if (element.classList.contains('impossible')) return;
+  // Deseleziona altri nella stessa sezione
   document.querySelectorAll('.section').forEach(section => {
     const label = section.querySelector('.variable-label');
     if (label && label.textContent === variable) {
@@ -136,35 +136,34 @@ function fieldClicked(variable, value, element) {
   updateFields();
 }
 
-
+// Normalizzazione per confronto flessibile
 function _normForEq(x){
   if (x === null || x === undefined) return '##NULL##';
-  // Preserve booleans exactly
   if (typeof x === 'boolean') return '##BOOL##' + (x ? '1' : '0');
-  // Numbers -> canonical numeric
   if (typeof x === 'number') return '##NUM##' + x;
   let s = String(x).trim();
-  // Try to parse numbers with comma or dot
   let sNum = s.replace(',', '.');
   const num = Number(sNum);
   if (!Number.isNaN(num) && /^-?\d+(\.\d+)?$/.test(sNum)) return '##NUM##' + num;
-  return '##STR##' + s;
+  return '##STR##' + s.toUpperCase(); // case-insensitive per stringhe tipo "SI"/"No"
 }
 function _eqFlex(a,b){ return _normForEq(a) === _normForEq(b); }
 
 function updateFields() {
-  // Purge any free-input variables from 'selected' (safety)
+  // Rimuovi eventuali variabili a input libero da 'selected'
   if (freeInputVars && freeInputVars.size) {
     [...freeInputVars].forEach(v => { if (v in selected) delete selected[v]; });
-  
+  }
+
   updateCalculatedFields();
-}
+
   const possible = combinations.filter(c =>
     Object.entries(selected).every(([v, val]) => {
-      if (freeInputVars.has(v)) return true; // non vincola la combinazione
+      if (freeInputVars.has(v)) return true; // non vincola
       return _eqFlex(c[v], val);
     })
   );
+
   document.querySelectorAll('.data-field').forEach(el => {
     const varName = el.closest('.section').dataset.var;
     const raw = el.textContent;
@@ -184,7 +183,7 @@ function updateFields() {
   });
 }
 
-
+// Parsing numeri con virgola o punto
 function _num(x){
   if (x === undefined || x === null) return NaN;
   if (typeof x === 'number') return x;
@@ -193,33 +192,56 @@ function _num(x){
   return Number.isFinite(n) ? n : NaN;
 }
 
-// Calcolo dei campi <calcolato>
+// --- Calcolo dei campi <calcolato> ---
 function updateCalculatedFields(){
   calcValues = {};
-  // Calcola NUMERO STRAPPI se disponibili: (LUNGHEZZA ROTOLO mt * 100) / FORMATO STRAPPO cm
+
+  // 1) NUMERO STRAPPI = (LUNGHEZZA ROTOLO mt * 100) / FORMATO STRAPPO cm
   const lenm = freeValues['LUNGHEZZA ROTOLO mt'];
-  // formato strappo può essere una selezione (18, 20, ...) oppure un valore libero futuro
   const formatoSel = (selected['FORMATO STRAPPO cm'] !== undefined) ? selected['FORMATO STRAPPO cm'] : freeValues['FORMATO STRAPPO cm'];
   const L = _num(lenm);
   const F = _num(formatoSel);
   let resultStrappi = null;
   if (Number.isFinite(L) && Number.isFinite(F) && F > 0){
     const raw = (L * 100.0) / F;
-    // Arrotondamento: per praticità commerciale, arrotondiamo all'intero più vicino
-    // (può essere adattato a ceil/floor se preferisci)
     const rounded = Math.round(raw);
     calcValues['NUMERO STRAPPI'] = rounded;
     resultStrappi = rounded;
   }
-  // Aggiorna UI del campo "NUMERO STRAPPI"
+
+  // 2) GR./ROTOLO APROX per richiesta di Franco
+  // Formula base: NUMERO VELI * GRAMMATURA gr./mq * (ALTEZZA cm / 100) * LUNGHEZZA ROTOLO mt
+  // Se ANIMA ESTRAIBILE == "SI": + (ALTEZZA cm * 1.5)
+  const veli = _num(selected['NUMERO VELI']);
+  const gramm = _num(selected['GRAMMATURA gr./mq']);
+  const altCm = _num(selected['ALTEZZA cm']);
+  const anima = selected['ANIMA ESTRAIBILE']; // stringa "SI"/"NO"
+  const A_m = Number.isFinite(altCm) ? (altCm / 100.0) : NaN;
+  let grRotolo = null;
+  if (Number.isFinite(veli) && Number.isFinite(gramm) && Number.isFinite(A_m) && Number.isFinite(L)){
+    let base = veli * gramm * A_m * L;
+    let extra = 0;
+    if (_eqFlex(anima, 'SI')) {
+      extra = altCm * 1.5; // correzione richiesta (senza /100)
+    }
+    grRotolo = base + extra;
+    // Arrotondo al grammo
+    grRotolo = Math.round(grRotolo);
+    calcValues['GR./ROTOLO APROX'] = grRotolo + ' g';
+  }
+
+  // Aggiorna UI dei campi calcolati
   document.querySelectorAll('.section').forEach(section => {
     const varName = section.dataset.var;
+    const span = section.querySelector('.calc-field');
+    if (!span) return;
     if (varName === 'NUMERO STRAPPI'){
-      const span = section.querySelector('.calc-field');
-      if (span){
-        span.textContent = (resultStrappi !== null) ? String(resultStrappi) : '—';
-        span.title = 'Campo calcolato' + ((resultStrappi !== null) ? ` = ${resultStrappi}` : '');
-      }
+      span.textContent = (resultStrappi !== null) ? String(resultStrappi) : '—';
+      span.title = 'Campo calcolato' + ((resultStrappi !== null) ? ` = ${resultStrappi}` : '');
+    }
+    if (varName === 'GR./ROTOLO APROX'){
+      span.textContent = (grRotolo !== null) ? (grRotolo + ' g') : '—';
+      span.title = 'Campo calcolato' + ((grRotolo !== null) ? ` ≈ ${grRotolo} g` : '');
     }
   });
 }

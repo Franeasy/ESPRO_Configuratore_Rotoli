@@ -128,7 +128,7 @@ h1{
 .section{
   position: relative;
   background: linear-gradient(180deg, rgba(174,235,228,0.25), rgba(174,235,228,0.15));
-  border: 1px solid rgba(11,42,60,0.10);
+  border: 2px solid rgba(11,42,60,0.18);
   border-radius: 16px;
   padding:14px;
   grid-column: span 4; /* default: 3 per riga su desktop */
@@ -141,7 +141,7 @@ h1{
   position: absolute; top: -12px; left: 12px;
   background: var(--teal-100);
   color: var(--teal-700);
-  font-weight: 800; font-size: 12px; letter-spacing: .06em; text-transform: uppercase;
+  font-weight: 800; font-size: 12px; letter-spacing: .06em;
   padding:4px 8px; border-radius: 999px;
   border:1px solid rgba(11,42,60,0.10);
   box-shadow: 0 2px 6px rgba(11,42,60,0.08);
@@ -155,7 +155,7 @@ h1{
   position: absolute; top: -12px; left: 12px;
   background: var(--sky-soft);
   color: var(--teal-700);
-  font-weight: 800; font-size: 12px; letter-spacing: .06em; text-transform: uppercase;
+  font-weight: 800; font-size: 12px; letter-spacing: .06em;
   padding:4px 8px; border-radius: 999px;
   border:1px solid rgba(11,42,60,0.10);
   box-shadow: 0 2px 6px rgba(11,42,60,0.08);
@@ -169,7 +169,7 @@ h1{
   position: absolute; top: -12px; left: 12px;
   background: var(--tiffany);
   color: var(--teal-700);
-  font-weight: 800; font-size: 12px; letter-spacing: .06em; text-transform: uppercase;
+  font-weight: 800; font-size: 12px; letter-spacing: .06em;
   padding:4px 8px; border-radius: 999px;
   border:1px solid rgba(11,42,60,0.10);
   box-shadow: 0 2px 6px rgba(11,42,60,0.08);
@@ -187,7 +187,6 @@ h1{
   gap:10px;
   font-weight:800;
   font-size: 12px;
-  text-transform:uppercase;
   letter-spacing: .06em;
   color:var(--muted);
   margin: 2px 0 10px 2px;
@@ -267,4 +266,57 @@ h1{
 @media (max-width:640px){
   .toolbar{ flex-wrap:wrap }
   .section{ grid-column: span 12 }  /* 1 per riga su mobile */
+}
+
+
+/* === Sofia: disattiva TUTTE le pseudo-etichette dei gruppi === */
+/* Non tocco nessun'altra regola. Disattivo solo i ::before sulle section */
+.section::before { content: none !important; }
+
+/* === Pseudo-etichetta richiesta: "CARATTERISTICHE PRODOTTO" sopra al campo COLORE === */
+/* Sovrascrivo la disattivazione globale dei ::before SOLO per la sezione COLORE */
+.section[data-var="COLORE"]{ margin-top: 18px; }
+.section[data-var="COLORE"]::before{
+  content: "CARATTERISTICHE PRODOTTO" !important;
+  position: absolute; top: -12px; left: 12px;
+  background: var(--teal-700);
+  color: #FFFFFF;
+  font-weight: 800; font-size: 12px; letter-spacing: .06em;
+  padding: 4px 8px; border-radius: 999px;
+  border: 1px solid rgba(11,42,60,0.10);
+  box-shadow: 0 2px 6px rgba(11,42,60,0.12);
+  z-index: 2;
+}
+
+/* === Pseudo-etichetta: "IMBALLO E LOGISTICA" sopra al campo DIAMETRO ESTERNO === */
+.section[data-var="DIAMETRO ESTERNO cm"]{ margin-top: 18px; }
+.section[data-var="DIAMETRO ESTERNO cm"]::before{
+  content: "IMBALLO E LOGISTICA" !important;
+  position: absolute; top: -12px; left: 12px;
+  background: var(--teal-700);
+  color: #FFFFFF;
+  font-weight: 800; font-size: 12px; letter-spacing: .06em;
+  padding: 4px 8px; border-radius: 999px;
+  border: 1px solid rgba(11,42,60,0.10);
+  box-shadow: 0 2px 6px rgba(11,42,60,0.12);
+  z-index: 2;
+}
+
+/* === Pseudo-etichetta: "PREZZI E OFFERTE" sopra al campo PREVISIONE ACQUISTO PALLETS === */
+.section[data-var="PREVISIONE ACQUISTO PALLETS"]{ margin-top: 18px; }
+.section[data-var="PREVISIONE ACQUISTO PALLETS"]::before{
+  content: "PREZZI E OFFERTE" !important;
+  position: absolute; top: -12px; left: 12px;
+  background: var(--teal-700);
+  color: #FFFFFF;
+  font-weight: 800; font-size: 12px; letter-spacing: .06em;
+  padding: 4px 8px; border-radius: 999px;
+  border: 1px solid rgba(11,42,60,0.10);
+  box-shadow: 0 2px 6px rgba(11,42,60,0.12);
+  z-index: 2;
+}
+
+
+.section:hover{
+  border-color: rgba(11,42,60,0.28);
 }
