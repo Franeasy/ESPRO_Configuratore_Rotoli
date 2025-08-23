@@ -1,0 +1,522 @@
+
+/* --- Tiffany Theme v1 for Franco ---
+   Derived from 'palette_tiffany.pdf' and the reference layout in 'Maschera Compilatore 2'.
+   Palette (HEX):
+   - Tiffany base #81D8D0
+   - Teal chiaro #3EC6C3
+   - Teal medio #1AA6A1
+   - Teal profondo #0B7A78
+   - Acquamarina soft #AEEBE4
+   - Mist menta (bg chiaro) #E9FBF8
+   - Sky soft (blu chiaro) #9ADCEB
+   - Blu cobalto (azione/link) #1B6FAF
+   - Navy profondo (testi) #0B2A3C
+   - Blue-gray (testo secondario/bordi) #5E7A86
+------------------------------------------------------------------ */
+:root{
+  /* Palette base */
+  --mint: #E9FBF8;              /* Mist menta (bg chiaro) */
+  --tiffany: #81D8D0;           /* Tiffany base */
+  --teal-100: #AEEBE4;          /* Acquamarina soft */
+  --teal-300: #3EC6C3;          /* Teal chiaro */
+  --teal-500: #1AA6A1;          /* Teal medio */
+  --teal-700: #0B7A78;          /* Teal profondo */
+  --sky-soft: #9ADCEB;          /* Sky soft */
+  --cobalt: #1B6FAF;            /* Blu cobalto (azioni) */
+  --navy: #0B2A3C;              /* Navy profondo (testi su chiaro) */
+  --bluegray: #5E7A86;          /* Testo secondario/bordi */
+  --white: #FFFFFF;
+
+  /* Semantic tokens (mapped to palette) */
+  --bg: var(--mint);
+  --card: #ffffff;
+  --muted: var(--bluegray);
+  --text: var(--navy);
+  --accent: var(--tiffany);
+  --accent-strong: var(--cobalt);
+  --danger: #D64A4A;
+  --ring: rgba(27,111,175,0.25); /* cobalt 25% */
+  --radius: 14px;
+  --shadow: 0 8px 26px rgba(11,42,60,0.08), 0 1px 0 rgba(11,42,60,0.06);
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji";
+  background:
+    radial-gradient(900px 600px at 85% -10%, rgba(129,216,208,0.18), transparent 70%),
+    radial-gradient(900px 600px at 10% 110%, rgba(154,220,235,0.18), transparent 70%),
+    var(--bg);
+  color:var(--text);
+  line-height:1.5;
+  padding:24px;
+}
+
+.container{
+  max-width:1100px;
+  margin:0 auto;
+}
+
+.header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  margin-bottom:18px;
+}
+
+h1{
+  font-size:clamp(22px, 2.4vw, 30px);
+  margin:0;
+  letter-spacing:0.3px;
+  color: var(--teal-700);
+}
+
+.toolbar{
+  display:flex;
+  gap:10px;
+}
+
+.button{
+  appearance:none;
+  border:1px solid rgba(11,42,60,0.10);
+  background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.75));
+  color:var(--text);
+  padding:10px 14px;
+  border-radius:12px;
+  cursor:pointer;
+  box-shadow: var(--shadow);
+  transition: transform .05s ease, border-color .2s ease, background .2s ease;
+  font-weight:600;
+}
+.button:hover{ border-color: rgba(27,111,175,0.35) }
+.button:active{ transform: translateY(1px) }
+.button--primary{
+  background: linear-gradient(180deg, var(--cobalt), #2B7EC0);
+  color:#FFFFFF;
+  border-color: transparent;
+}
+.button--danger{
+  background: linear-gradient(180deg, #E45757, #D64A4A);
+  color:#ffffff;
+  border-color: transparent;
+}
+
+.card{
+  background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.85));
+  border:1px solid rgba(11,42,60,0.10);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(4px);
+}
+
+/* --- Layout della Maschera --- */
+.grid{
+  display:grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap:16px;
+}
+
+/* override esplicito per la maschera principale */
+#mask{
+  padding: 16px;
+}
+
+/* Ogni sezione di variabile */
+.section{
+  position: relative;
+  background: linear-gradient(180deg, rgba(174,235,228,0.25), rgba(174,235,228,0.15));
+  border: 2px solid rgba(11,42,60,0.18);
+  border-radius: 16px;
+  padding:14px;
+  grid-column: span 4; /* default: 3 per riga su desktop */
+}
+
+/* Gruppi visivi (ispirati al PDF) con label "virtuali" */
+.section:nth-child(1){ margin-top: 8px }
+.section:nth-child(1)::before{
+  content: "Caratteristiche prodotto";
+  position: absolute; top: -12px; left: 12px;
+  background: var(--teal-100);
+  color: var(--teal-700);
+  font-weight: 800; font-size: 12px; letter-spacing: .06em;
+  padding:4px 8px; border-radius: 999px;
+  border:1px solid rgba(11,42,60,0.10);
+  box-shadow: 0 2px 6px rgba(11,42,60,0.08);
+}
+
+.section:nth-child(9){
+  background: linear-gradient(180deg, rgba(154,220,235,0.25), rgba(154,220,235,0.15));
+}
+.section:nth-child(9)::before{
+  content: "Imballo e logistica";
+  position: absolute; top: -12px; left: 12px;
+  background: var(--sky-soft);
+  color: var(--teal-700);
+  font-weight: 800; font-size: 12px; letter-spacing: .06em;
+  padding:4px 8px; border-radius: 999px;
+  border:1px solid rgba(11,42,60,0.10);
+  box-shadow: 0 2px 6px rgba(11,42,60,0.08);
+}
+
+.section:nth-child(15){
+  background: linear-gradient(180deg, rgba(129,216,208,0.25), rgba(129,216,208,0.15));
+}
+.section:nth-child(15)::before{
+  content: "Prezzi e offerte";
+  position: absolute; top: -12px; left: 12px;
+  background: var(--tiffany);
+  color: var(--teal-700);
+  font-weight: 800; font-size: 12px; letter-spacing: .06em;
+  padding:4px 8px; border-radius: 999px;
+  border:1px solid rgba(11,42,60,0.10);
+  box-shadow: 0 2px 6px rgba(11,42,60,0.08);
+}
+
+/* Allarga i campi "prezzi" come nel PDF: 2 per riga */
+.section:nth-child(n+17):nth-child(-n+20){
+  grid-column: span 6;
+}
+
+/* Tipografia delle etichette variabile */
+.variable-label{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-weight:800;
+  font-size: 12px;
+  letter-spacing: .06em;
+  color:var(--muted);
+  margin: 2px 0 10px 2px;
+}
+
+/* Wrapper opzioni */
+.options{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+
+/* Campi cliccabili e input */
+.data-field, .calc-field, .data-input{
+  appearance:none;
+  border:1px solid rgba(11,42,60,0.12);
+  background: var(--card);
+  color:var(--text);
+  padding:10px 12px;
+  border-radius:12px;
+  cursor:pointer;
+  transition: border-color .2s ease, box-shadow .2s ease, background .2s ease, color .2s ease, transform .05s ease;
+  box-shadow: var(--shadow);
+  min-height: 40px;
+}
+
+.data-field:hover{ border-color: rgba(27,111,175,0.45) }
+.data-field.selected{
+  background: linear-gradient(180deg, var(--tiffany), var(--teal-300));
+  color:var(--navy);
+  border-color: var(--teal-500);
+  transform: translateY(1px);
+}
+.data-field.impossible{
+  background: rgba(94,122,134,0.06);
+  color: rgba(94,122,134,0.55);
+  border-style:dashed;
+  cursor: not-allowed;
+  opacity:.9;
+}
+
+.data-input{
+  cursor:text;
+  min-width: 220px;
+  background: #ffffff;
+}
+.data-input::placeholder{ color: rgba(11,42,60,0.45) }
+.data-input:focus{
+  outline:none;
+  border-color: var(--accent-strong);
+  box-shadow: 0 0 0 4px var(--ring);
+}
+.data-input.filled{
+  background: linear-gradient(180deg, rgba(129,216,208,0.12), rgba(129,216,208,0.08));
+  border-color: rgba(27,111,175,0.45);
+}
+
+.calc-field{
+  background: rgba(174,235,228,0.35);
+  color: var(--muted);
+  cursor: default;
+}
+
+/* Piè di pagina */
+.footer-hint{
+  margin-top: 14px;
+  color: var(--muted);
+  font-size: 13px;
+  text-align:right;
+}
+
+/* Responsivo */
+@media (max-width:1024px){
+  .section{ grid-column: span 6 }   /* 2 per riga su tablet */
+  .section:nth-child(n+17):nth-child(-n+20){ grid-column: span 12 } /* prezzi a tutta riga su tablet */
+}
+@media (max-width:640px){
+  .toolbar{ flex-wrap:wrap }
+  .section{ grid-column: span 12 }  /* 1 per riga su mobile */
+}
+
+
+/* === Sofia: disattiva TUTTE le pseudo-etichette dei gruppi === */
+/* Non tocco nessun'altra regola. Disattivo solo i ::before sulle section */
+.section::before { content: none !important; }
+
+/* === Pseudo-etichetta richiesta: "CARATTERISTICHE PRODOTTO" sopra al campo COLORE === */
+/* Sovrascrivo la disattivazione globale dei ::before SOLO per la sezione COLORE */
+.section[data-var="COLORE"]{ margin-top: 18px; }
+.section[data-var="COLORE"]::before{
+  content: "CARATTERISTICHE PRODOTTO" !important;
+  position: absolute; top: -12px; left: 12px;
+  background: var(--teal-700);
+  color: #FFFFFF;
+  font-weight: 800; font-size: 12px; letter-spacing: .06em;
+  padding: 4px 8px; border-radius: 999px;
+  border: 1px solid rgba(11,42,60,0.10);
+  box-shadow: 0 2px 6px rgba(11,42,60,0.12);
+  z-index: 2;
+}
+
+/* === Pseudo-etichetta: "IMBALLO E LOGISTICA" sopra al campo DIAMETRO ESTERNO === */
+.section[data-var="DIAMETRO ESTERNO cm"]{ margin-top: 18px; }
+.section[data-var="DIAMETRO ESTERNO cm"]::before{
+  content: "IMBALLO E LOGISTICA" !important;
+  position: absolute; top: -12px; left: 12px;
+  background: var(--teal-700);
+  color: #FFFFFF;
+  font-weight: 800; font-size: 12px; letter-spacing: .06em;
+  padding: 4px 8px; border-radius: 999px;
+  border: 1px solid rgba(11,42,60,0.10);
+  box-shadow: 0 2px 6px rgba(11,42,60,0.12);
+  z-index: 2;
+}
+
+/* === Pseudo-etichetta: "PREZZI E OFFERTE" sopra al campo PREVISIONE ACQUISTO PALLETS === */
+.section[data-var="PREVISIONE ACQUISTO PALLETS"]{ margin-top: 18px; }
+.section[data-var="PREVISIONE ACQUISTO PALLETS"]::before{
+  content: "PREZZI E OFFERTE" !important;
+  position: absolute; top: -12px; left: 12px;
+  background: var(--teal-700);
+  color: #FFFFFF;
+  font-weight: 800; font-size: 12px; letter-spacing: .06em;
+  padding: 4px 8px; border-radius: 999px;
+  border: 1px solid rgba(11,42,60,0.10);
+  box-shadow: 0 2px 6px rgba(11,42,60,0.12);
+  z-index: 2;
+}
+
+
+.section:hover{
+  border-color: rgba(11,42,60,0.28);
+}
+
+.logo-contatti {
+  height: 60px;
+  margin-left: 12px;
+  cursor: pointer;
+}
+
+.contatti-link {
+  display: inline-flex;
+  align-items: center;
+}
+
+
+h1 {
+  font-size: clamp(20px, 2.2vw, 26px); /* leggermente più piccolo */
+  margin: 0;
+  letter-spacing: 0.3px;
+  color: var(--teal-700);
+  white-space: nowrap; /* impedisce di andare a capo */
+}
+
+.logo-contatti {
+  height: 60px;         /* ingrandito rispetto a prima */
+  margin-left: 8px;     /* logo vicino al testo */
+  cursor: pointer;
+}
+
+.contatti-link {
+  display: inline-flex;
+  align-items: center;
+}
+
+
+/* --- CHECK PAGE & Header tweaks (v2) --- */
+.logo-contatti{ height:60px; width:auto; display:block; }
+.contatti-link{ display:flex; align-items:center; justify-content:center; padding:2px; border-radius:10px; border:none; gap:10px; margin-bottom:14px }
+.check-list{ display:flex; flex-direction:column; gap:10px; margin-top:8px }
+.check-row{ display:grid; grid-template-columns: 1fr 2fr; gap:10px; align-items:center }
+
+.chip-var{
+  background: var(--teal-100); /* Acquamarina soft */
+  color: var(--text);
+  border-radius: 999px;
+  padding: 10px 14px;
+  font-weight:700;
+  border:1px solid rgba(11,42,60,0.12);
+  display:flex; align-items:center;
+}
+.chip-val{
+  background: var(--mint); /* Mist menta */
+  color: var(--text);
+  border-radius: 14px;
+  padding: 10px 14px;
+  border:1px solid rgba(11,42,60,0.12);
+  display:flex; align-items:center;
+}
+
+.page-date{
+  position: fixed;
+  left: 16px;
+  bottom: 12px;
+  color: var(--text);
+  font-weight:600;
+  opacity: .9;
+}
+/* responsive */
+@media (max-width: 700px){
+  .check-row{ grid-template-columns: 1fr; }
+}
+
+
+/* --- Print layout: A4 portrait, 79% scale, show colors, avoid breaks --- */
+@media print {
+  /* ensure logo and toolbar are visible in print */
+  .contatti-link{ display:inline-flex !important; align-items:center !important; }
+  .logo-contatti{ display:inline-block !important; height:60px !important; visibility:visible !important; }
+  #backBtn, #printBtn{ display:inline-block !important; }
+  @page { size: A4 portrait; margin: 8mm; } /* 'minimi' approx */
+  html, body { height: auto; }
+  body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .toolbar, #backBtn, .contatti-link { display: none !important; }
+  /* 79% scale of the main container */
+  .container { transform: scale(0.79); transform-origin: top left; width: calc(100% / 0.79); }
+  /* Keep groups and cards unbroken across pages */
+  .card, .section, .check-wrapper { break-inside: avoid; page-break-inside: avoid; }
+  /* Ensure canvas/SVG charts print */
+  canvas, svg { max-width: 100% !important; height: auto !important; }
+}
+
+/* --- Print logo in absolute position (centered) --- */
+@media print {
+  .print-logo {
+    display: block !important;
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+  }
+}
+
+/* === Print modal (hidden by default) === */
+.print-modal-backdrop{
+  position: fixed;
+  inset: 0;
+  display: none;                 /* hidden by default */
+  place-items: center;
+  background: rgba(0,0,0,.45);
+  z-index: 2147483646;
+}
+.print-modal-backdrop.is-open{   /* visible when opened */
+  display: grid;
+}
+.print-modal-dialog{
+  width: min(720px, 92vw);
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.35);
+  padding: 18px 20px;
+  font: 16px/1.5 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+  color: #0b2a3c;
+  text-align: left;
+  cursor: default;
+}
+.print-modal-header{ font-weight: 700; margin-bottom: 6px; }
+.print-modal-body a{ color: #0b82a3; text-decoration: underline; }
+@media print { .print-modal-backdrop{ display: none !important; } }
+
+/* === Print modal (hidden by default) === */
+.print-modal-backdrop{
+  position: fixed;
+  inset: 0;
+  display: none;
+  place-items: center;
+  background: rgba(0,0,0,.45);
+  z-index: 2147483646;
+}
+.print-modal-backdrop.is-open{ display: grid; }
+
+.print-modal-dialog{
+  width: min(720px, 92vw);
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.35);
+  padding: 20px;
+  color: #0b2a3c;
+  font: 16px/1.5 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+  transform: translateY(8px);
+  opacity: 0;
+  transition: opacity .18s ease, transform .18s ease;
+}
+.print-modal-backdrop.is-open .print-modal-dialog{
+  transform: translateY(0);
+  opacity: 1;
+}
+.print-modal-header{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.pm-logo{
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  border-radius: 8px;
+}
+.print-modal-body a{ color: #0b82a3; text-decoration: underline; }
+
+.print-modal-actions{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+}
+.pm-btn{
+  appearance: none;
+  border: 1px solid rgba(11,42,60,0.2);
+  background: #ffffff;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font: 15px/1.2 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+  cursor: pointer;
+}
+.pm-btn:hover{ box-shadow: 0 2px 10px rgba(0,0,0,.08); }
+.pm-primary{
+  background: #0b82a3;
+  color: #fff;
+  border-color: #0b82a3;
+}
+.pm-help{
+  margin-left: auto;
+  font-size: 14px;
+  text-decoration: underline;
+}
+
+@media (prefers-reduced-motion: reduce){
+  .print-modal-dialog{ transition: none; }
+}
+@media print { .print-modal-backdrop{ display: none !important; } }
