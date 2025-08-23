@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Check Order</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1 id="orderTitle">Order</h1>
+      <a href="https://www.esprosrl.com/" target="_blank" class="contatti-link" title="Vai al sito ESPRO">
+        <img src="logo.jpg" alt="Logo ESPRO" class="logo-contatti">
+      </a>
+      <div class="toolbar">
+        <button id="backBtn" class="button" title="Torna indietro">Back</button>
+        <button id="printBtn" class="button button--primary" title="Stampa/Salva PDF">Print PDF</button>
+      </div>
+    </div>
+
+    <div class="check-wrapper card">
+      <div id="checkList" class="check-list"></div>
+    
+    <!-- Nota consegna + immagine telefono -->
+    <div style="display:flex;justify-content:flex-end;margin:16px 0 6px;">
+      <span style="font-size:14px;">La nostra offerta verrà inviata entro 48 ore.</span>
+    </div>
+    <div style="display:flex;justify-content:center;align-items:center;margin:12px 0 28px;">
+      <img src="telefono_3.jpg" alt="Telefono" style="width:520px;height:auto" />
+    </div>
+</div>
+    <div id="pageDate" class="page-date"></div>
+  </div>
+<script defer src="check.js"></script>
+
+
+<!-- Print-only logo -->
+<div class="print-logo" style="display:none; text-align:center; position: absolute; top: 20px; left: 50%; transform: translateX(-50%);">
+  <img src="logo.jpg" alt="Logo ESPRO" style="width:120px; height:auto;" />
+</div>
+<!-- Modal shown before Save as PDF -->
+<!-- Enhanced centered modal shown before Save as PDF -->
+<div id="print-modal" class="print-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="print-modal-title" aria-hidden="true">
+  <div class="print-modal-dialog pm-animate" tabindex="-1">
+    <div class="print-modal-header">
+      <img src="logo.jpg" alt="ES.PRO SRL" class="pm-logo" />
+      <h2 id="print-modal-title">Thank you for your kind interest.</h2>
+    </div>
+    <div class="print-modal-body">
+      Kindly save this PDF file and forward it to
+      <a class="pm-mail" href="mailto:info@esprosrl.com?subject=Quotation%20request">info@esprosrl.com</a>.<br />
+      Our detailed quotation will be provided within 48 hours.
+    </div>
+    <div class="print-modal-actions">
+      <button id="pm-proceed" class="pm-btn pm-primary" autofocus>Proceed to Save PDF</button>
+      <button id="pm-cancel" class="pm-btn">Cancel</button>
+      <a class="pm-help" href="mailto:info@esprosrl.com?subject=Assistance%20needed">Need help?</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>
