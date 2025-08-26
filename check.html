@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Check Order</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1 id="orderTitle">Order</h1>
+      <a href="https://www.esprosrl.com/" target="_blank" class="contatti-link" title="Vai al sito ESPRO">
+        <img src="logo.jpg" alt="Logo ESPRO" class="logo-contatti">
+      </a>
+      <div class="toolbar">
+        <button id="backBtn" class="button" title="Torna indietro">Back</button>
+        <button id="printBtn" class="button button--primary" title="Stampa/Salva PDF">Print PDF</button>
+      </div>
+    </div>
+
+    <div class="check-wrapper card">
+      <div id="checkList" class="check-list"></div>
+    
+    <!-- Nota consegna + immagine telefono -->
+    <div style="display:flex;justify-content:flex-end;margin:16px 0 6px;">
+      <span style="font-size:14px;">La nostra offerta verrà inviata entro 48 ore.</span>
+    </div>
+    <div style="display:flex;justify-content:center;align-items:center;margin:12px 0 28px;">
+      <img src="telefono_3.jpg" alt="Telefono" style="width:520px;height:auto" />
+    </div>
+</div>
+    <div id="pageDate" class="page-date"></div>
+  </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/3.0.1/jspdf.umd.min.js"></script>
+
+
+
+<!-- Print-only logo -->
+<div class="print-logo" style="display:none; text-align:center; position: absolute; top: 20px; left: 50%; transform: translateX(-50%);">
+  <img src="logo.jpg" alt="Logo ESPRO" style="width:120px; height:auto;" />
+</div>
+<!-- Modal shown before Save as PDF -->
+<div id="print-modal" class="print-modal-backdrop" aria-hidden="true">
+  <div class="print-modal-dialog" role="dialog" aria-live="polite" aria-label="Notice">
+    <div class="print-modal-header">Thank you for your kind interest.</div>
+    <div class="print-modal-body">
+      Kindly save this PDF file and forward it to
+      <a href="mailto:info@esprosrl.com">info@esprosrl.com</a>.<br>
+      Our detailed quotation will be provided within 48 hours.
+        <div class="print-modal-actions">
+      <button id="pmProceed" class="pm-btn pm-primary">Proceed to Save PDF</button>
+      <button id="pmCancel" class="pm-btn">Cancel</button>
+      <a href="mailto:info@esprosrl.com" class="pm-help">Need help?</a>
+    </div>
+  </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/3.0.1/jspdf.umd.min.js"></script>
+<script src="check.js?v=20250824c"></script>
+
+<script>
+/* toast wiring */
+(function(){
+  const btn = document.getElementById('printBtn');
+  const modal = document.getElementById('print-modal');
+  const proceed = document.getElementById('pmProceed');
+  const cancel = document.getElementById('pmCancel');
+  if(!btn || !modal || !proceed || !cancel) return;
+
+  const open = () => { modal.classList.add('is-open'); modal.removeAttribute('aria-hidden'); };
+  const close = () => { modal.classList.remove('is-open'); modal.setAttribute('aria-hidden','true'); };
+
+  function onBtnClick(e){
+    if (window.__skipModal){ window.__skipModal = false; return; }
+    e.preventDefault(); e.stopPropagation(); if (e.stopImmediatePropagation) e.stopImmediatePropagation();
+    open();
+  }
+  // Intercetta PRIMA dell'onclick definito in check.js
+  btn.addEventListener('click', onBtnClick, true);
+
+  proceed.addEventListener('click', function(){
+    close();
+    window.__skipModal = true;
+    // Trigghera l'handler originale (createPdfFromSelectionsOrdered)
+    setTimeout(() => btn.click(), 0);
+  });
+  cancel.addEventListener('click', close);
+  window.addEventListener('keydown', (e) => { if(e.key === 'Escape') close(); });
+})();
+</script>
+
+</body>
+</html>
