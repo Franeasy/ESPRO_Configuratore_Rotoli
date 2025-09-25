@@ -9,7 +9,7 @@
    - Acquamarina soft #AEEBE4
    - Mist menta (bg chiaro) #E9FBF8
    - Sky soft (blu chiaro) #9ADCEB
-   - Blu cobalto (azione/link) #1B6FAF
+   - Blue cobalto (azione/link) #1B6FAF
    - Navy profondo (testi) #0B2A3C
    - Blue-gray (testo secondario/bordi) #5E7A86
 ------------------------------------------------------------------ */
@@ -22,7 +22,7 @@
   --teal-500: #1AA6A1;          /* Teal medio */
   --teal-700: #0B7A78;          /* Teal profondo */
   --sky-soft: #9ADCEB;          /* Sky soft */
-  --cobalt: #1B6FAF;            /* Blu cobalto (azioni) */
+  --cobalt: #1B6FAF;            /* Blue cobalto (azioni) */
   --navy: #0B2A3C;              /* Navy profondo (testi su chiaro) */
   --bluegray: #5E7A86;          /* Testo secondario/bordi */
   --white: #FFFFFF;
@@ -137,7 +137,7 @@ h1{
 /* Gruppi visivi (ispirati al PDF) con label "virtuali" */
 .section:nth-child(1){ margin-top: 8px }
 .section:nth-child(1)::before{
-  content: "Caratteristiche prodotto";
+  content: "PRODUCT FEATURES";
   position: absolute; top: -12px; left: 12px;
   background: var(--teal-100);
   color: var(--teal-700);
@@ -273,11 +273,11 @@ h1{
 /* Non tocco nessun'altra regola. Disattivo solo i ::before sulle section */
 .section::before { content: none !important; }
 
-/* === Pseudo-etichetta richiesta: "CARATTERISTICHE PRODOTTO" sopra al campo COLORE === */
-/* Sovrascrivo la disattivazione globale dei ::before SOLO per la sezione COLORE */
-.section[data-var="COLORE"]{ margin-top: 18px; }
-.section[data-var="COLORE"]::before{
-  content: "CARATTERISTICHE PRODOTTO" !important;
+/* === Pseudo-etichetta richiesta: "PRODUCT FEATURES" sopra al campo COLOR === */
+/* Sovrascrivo la disattivazione globale dei ::before SOLO per la sezione COLOR */
+.section[data-var="COLOR"]{ margin-top: 18px; }
+.section[data-var="COLOR"]::before{
+  content: "PRODUCT FEATURES" !important;
   position: absolute; top: -12px; left: 12px;
   background: var(--teal-700);
   color: #FFFFFF;
@@ -288,10 +288,10 @@ h1{
   z-index: 2;
 }
 
-/* === Pseudo-etichetta: "IMBALLO E LOGISTICA" sopra al campo DIAMETRO ESTERNO === */
-.section[data-var="DIAMETRO ESTERNO cm"]{ margin-top: 18px; }
-.section[data-var="DIAMETRO ESTERNO cm"]::before{
-  content: "IMBALLO E LOGISTICA" !important;
+/* === Pseudo-etichetta: "PACKAGING AND LOGISTICS" sopra al campo DIAMETRO ESTERNO === */
+.section[data-var="EXTERNAL ROLL DIAMETER cm"]{ margin-top: 18px; }
+.section[data-var="EXTERNAL ROLL DIAMETER cm"]::before{
+  content: "PACKAGING AND LOGISTICS" !important;
   position: absolute; top: -12px; left: 12px;
   background: var(--teal-700);
   color: #FFFFFF;
@@ -302,10 +302,10 @@ h1{
   z-index: 2;
 }
 
-/* === Pseudo-etichetta: "PREZZI E OFFERTE" sopra al campo PREVISIONE ACQUISTO PALLETS === */
-.section[data-var="PREVISIONE ACQUISTO PALLETS"]{ margin-top: 18px; }
-.section[data-var="PREVISIONE ACQUISTO PALLETS"]::before{
-  content: "PREZZI E OFFERTE" !important;
+/* === Pseudo-etichetta: "PRICES AND OFFERS" sopra al campo PURCHASE FORECAST IN NR. OF PALLET === */
+.section[data-var="PURCHASE FORECAST IN NR. OF PALLET"]{ margin-top: 18px; }
+.section[data-var="PURCHASE FORECAST IN NR. OF PALLET"]::before{
+  content: "PRICES AND OFFERS" !important;
   position: absolute; top: -12px; left: 12px;
   background: var(--teal-700);
   color: #FFFFFF;
@@ -679,4 +679,7 @@ h1 {
 
   /* Scala globale lato WebKit/Chrome per chiudere in 1 pagina senza usare transform (più stabile in stampa) */
   html, body { zoom: 0.90; } /* Se serve, porta a 0.88 */
-}
+}.section[data-var] { min-height: 118px !important; }
+
+
+

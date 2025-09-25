@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CREATE YOUR ROLL — Client</title>
+
+  <link rel="stylesheet" href="styles.css?v=20250924">
+  <link rel="stylesheet" href="hotfix.css?v=20250924b">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>CREATE YOUR ROLL</h1>
+      <a href="https://www.esprosrl.com/" target="_blank" class="contatti-link" title="Vai al sito ESPRO">
+        <img src="logo.jpg" alt="Logo ESPRO" class="logo-contatti">
+      </a>
+      <div class="toolbar">
+        <button id="cleanBtn" class="button button--danger" title="Azzera selezioni">Clean</button>
+        <button id="checkBtn" class="button button--primary" title="Controlla ordine">Check Order</button>
+      </div>
+    </div>
+
+    <div id="mask" class="grid card"></div>
+    <div class="footer-hint">Tip: click to select/deselect. Unavailable options will be disabled.</div>
+  </div>
+
+  <!-- JS principale -->
+  <script defer src="script_client.js?v=20250924"></script>
+
+  <!-- Micro-trigger non invasivo: rilancia gli eventi per innescare i calcoli esistenti -->
+  <script>
+    (function () {
+      function retriggerAll() {
+        const evts = ['input','change','click'];
+        document.querySelectorAll('.section[data-var] input, .section[data-var] select, .section[data-var] button')
+          .forEach(el => evts.forEach(t => el.dispatchEvent(new Event(t, {bubbles:true}))));
+      }
+      // al primo load (dopo che script_client ha montato tutto)
+      window.addEventListener('load', () => setTimeout(retriggerAll, 0));
+      // dopo Clean
+      document.addEventListener('click', (e) => {
+        const id = (e.target && e.target.id) || '';
+        if (id === 'cleanBtn') {
+          setTimeout(retriggerAll, 0);
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

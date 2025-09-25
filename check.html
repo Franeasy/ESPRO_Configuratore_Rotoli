@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+<!-- EN-FIX v3 -->
   <div class="container">
     <div class="header">
       <h1 id="orderTitle">Order</h1>
@@ -14,6 +15,7 @@
         <img src="logo.jpg" alt="Logo ESPRO" class="logo-contatti">
       </a>
       <div class="toolbar">
+        <button id="resetCheckBtn" class="button" title="Azzera anche qui">Reset</button>
         <button id="backBtn" class="button" title="Torna indietro">Back</button>
         <button id="printBtn" class="button button--primary" title="Stampa/Salva PDF">Print PDF</button>
       </div>
@@ -24,7 +26,7 @@
     
     <!-- Nota consegna + immagine telefono -->
     <div style="display:flex;justify-content:flex-end;margin:16px 0 6px;">
-      <span style="font-size:14px;">La nostra offerta verrà inviata entro 48 ore.</span>
+      <span id="offer-note" style="font-size:14px;">Our offer will be sent within 48 hours.</span>
     </div>
     <div style="display:flex;justify-content:center;align-items:center;margin:12px 0 28px;">
       <img src="telefono_3.jpg" alt="Telefono" style="width:520px;height:auto" />
@@ -56,7 +58,7 @@
   </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/3.0.1/jspdf.umd.min.js"></script>
-<script src="check.js?v=20250824c"></script>
+<script src="check.js?v=20250922084217"></script>
 
 <script>
 /* toast wiring */
@@ -87,6 +89,20 @@
   cancel.addEventListener('click', close);
   window.addEventListener('keydown', (e) => { if(e.key === 'Escape') close(); });
 })();
+</script>
+
+
+<script>
+// Runtime guard: force English sentence if any Italian variant is present in DOM
+document.addEventListener('DOMContentLoaded', function(){
+  const it = /La nostra offerta.*(48|quarantotto) ore\.?/i;
+  const en = "Our offer will be sent within 48 hours.";
+  const nodes = document.querySelectorAll('span, p, div');
+  nodes.forEach(n => {
+    const t = n.textContent && n.textContent.trim();
+    if (t && it.test(t)) n.textContent = en;
+  });
+});
 </script>
 
 </body>

@@ -147,17 +147,17 @@
 
     // —— Layout colonne ——
     const boxW = right - margin;
-    const labelW = 52;              // più spazio ai valori
-    const valW = boxW - labelW - 2;
-    const gapY = 2;
+    const labelW = (boxW - 2) / 2;  // equal halves for symmetry
+    const valW   = (boxW - 2) / 2;
+    const gapY = 1.5;
 
     // —— Riserva a fondo pagina per messaggio + immagine ——
     const reserveBottom = 32;  // mm
 
     // —— Misuratore dinamico per riempire l'area utile senza andare a 2 pagine ——
     const BASE_FONT = 11;
-    const BASE_ROW = 8;
-    const BASE_LINE = 6.2;
+    const BASE_ROW = 7;
+    const BASE_LINE = 5.6;
 
     function totalHeightForFont(fontSize){
       doc.setFontSize(fontSize);
@@ -190,7 +190,7 @@
     const BODY_FONT = Math.min(16, Math.max(9, Math.round(best*10)/10));
     doc.setFontSize(BODY_FONT);
     const lineH = BASE_LINE * (BODY_FONT/BASE_FONT);
-    const rowMin = BASE_ROW * (BODY_FONT/BASE_FONT);
+    const rowMin = Math.round((BASE_ROW * (BODY_FONT/BASE_FONT)) * 0.8);
 
     // —— Disegno righe ——
     for (let idx = 0; idx < orderedEntries.length; idx++){
@@ -207,23 +207,48 @@
       // Box esterno
       roundedRect(doc, margin, y, boxW, h, 2);
 
-      // Etichetta (bold)
-      doc.setFont('helvetica','bold');
-      doc.text(linesLab, margin + 3, y + 4.8, { baseline:'top' });
+      
+      
+      // Etichetta (background Tiffany) + Valore in grassetto, entrambi centrati verticalmente
+      // Calcola altezza contenuti (in righe * lineH)
+      const labH = Math.max(lineH, linesLab.length * lineH);
+      const valH = Math.max(lineH, linesVal.length * lineH);
 
-      // Divisore verticale e Valore
-      doc.setFont('helvetica','normal');
+      // Box esterno
+      roundedRect(doc, margin, y, boxW, h, 2);
+
+      // --- Colonna etichetta: riempimento Tiffany (#81D8D0) ---
+      try { doc.setFillColor(129,216,208); } catch(e) {}
+      // Micro-inset per non coprire il bordo arrotondato
+      doc.rect(margin + 0.8, y + 0.8, labelW - 1.6, h - 1.6, 'F');
+
+      // linea verticale separatrice
+      doc.setDrawColor(11,42,60);
       const valX = margin + labelW;
       doc.line(valX, y, valX, y + h);
-      doc.text(linesVal, valX + 3, y + 4.8, { baseline:'top' });
+
+      // Etichetta (testo normale) centrata verticalmente
+      doc.setFont('helvetica','normal');
+      doc.setFontSize(BODY_FONT - 3);
+      const labX = margin + 3;
+      const labStartY = Math.max(y + 2, y + (h - labH)/2);
+      doc.text(linesLab, labX, labStartY, { baseline:'top' });
+
+      // Valore (grassetto), centrato verticalmente
+      doc.setFont('helvetica','bold');
+      doc.setFontSize(BODY_FONT - 3);
+      const valStartY = Math.max(y + 2, y + (h - valH)/2);
+      doc.text(linesVal, valX + 3, valStartY, { baseline:'top' });
 
       // Avanza
+
+
       y += h + gapY;
     }
 
     // —— Footer: frase + immagine telefono ——
     const finalY = Math.min(pageH - 14, y + 4);
-    const msg = 'La nostra offerta verrà inviata entro 48 ore.';
+    const msg = 'Our offer will be sent within 48 hours.';
     doc.setFont('helvetica','italic'); doc.setFontSize(12);
     doc.text(msg, margin, finalY);
     // Didascalia contatti (testo selezionabile e leggibile)

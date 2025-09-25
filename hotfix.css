@@ -1,0 +1,51 @@
+/* === HOTFIX FINALE — STEP_013 (20250924b) =========================
+   - Lascia visibili le 3 etichette lunghe (barre verdi).
+   - Rimuove SOLO le 2 pill generate da ::before su COLOR e PURCHASE FORECAST…
+     con specificità più alta per battere eventuali regole esistenti.
+   - Pareggia l'altezza di COLOR e PURCHASE FORECAST a quella delle altre card.
+===================================================================== */
+
+/* 1) Silenzia le pseudo-etichette ::before con specificità elevata */
+div.section[data-var="COLOR"]::before,
+div.section[data-var="PURCHASE FORECAST IN NR. OF PALLET"]::before,
+.section[data-var="COLOR"]:before,
+.section[data-var="PURCHASE FORECAST IN NR. OF PALLET"]:before {
+  content: none !important;
+  display: none !important;
+}
+
+/* 2) Pareggia l'altezza delle due card (stessa altezza visiva delle altre) */
+.section[data-var="COLOR"],
+.section[data-var="PURCHASE FORECAST IN NR. OF PALLET"] {
+  min-height: 118px !important;   /* valore di riferimento */
+  display: flex;
+  flex-direction: column;
+  padding-top: 14px !important;
+  padding-bottom: 14px !important;
+}
+
+/* (Opzionale) Se vuoi rendere uniforme TUTTE le card, sblocca questa:
+.section[data-var] { min-height: 118px !important; }
+*/
+
+/* NOTE: Non tocchiamo i titoli lunghi (barre verdi). */
+/* 1) Niente margine sotto i titoli lunghi (barre verdi) */
+.section[style]{
+  margin-bottom: 0 !important;
+}
+
+/* 2) Niente margine sopra alle due card “basse” */
+.section[data-var="COLOR"],
+.section[data-var="PURCHASE FORECAST IN NR. OF PALLET"]{
+  margin-top: 0 !important;
+  min-height: 118px !important;   /* stessa altezza delle altre */
+  display: flex;
+  flex-direction: column;
+}
+
+/* 3) Se la label interna aggiunge margine, azzeralo (capita con alcune card) */
+.section[data-var="COLOR"]  > .variable-label,
+.section[data-var="PURCHASE FORECAST IN NR. OF PALLET"] > .variable-label{
+  margin-top: 0 !important;
+}
+
